@@ -482,3 +482,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# CLI Commands
+client-cli.sh
+server-cli.sh
