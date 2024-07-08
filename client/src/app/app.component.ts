@@ -18,13 +18,19 @@ export class AppComponent implements OnInit {
   http = inject(HttpClient); // This is new approach
   title = 'Dating App 💖';
   users : any;
+  displayUsers : any;
 
   // Interface
   ngOnInit(): void {
     this.http.get('http://localhost:5000/api/users').subscribe({
-      next:(response)=>{this.users = response},
+      next:(response)=>{
+        this.users = response
+        if(this.users!=null) this.displayUsers = this.users.filter((x: { id: number; })=> x.id<=5);
+      },
       error: error =>console.log("Error is - ", error),
       complete: ()=> console.log(`Fetching completed`)
     })
   };
+      
+  
 }

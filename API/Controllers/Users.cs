@@ -7,16 +7,13 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]  // /api/users
-public class UsersController(DataContext context) : ControllerBase
+public class UsersController(DataContext context) : MyBaseController
 {
 
     [HttpGet]
 
     public async Task<ActionResult<IEnumerable<User>>> GetUsers(){
         var users = await context.Users.ToListAsync();
-        // jsdjs 
-        // Test Comment
-        // Testing test banch
         return users;
     }
     
@@ -24,7 +21,7 @@ public class UsersController(DataContext context) : ControllerBase
 
     public async Task<ActionResult<User>> GetUser(int id){
         var user = await context.Users.FindAsync(id);
-        if(user==null) return Ok();
-        return user;
+        if(user==null) return NotFound();
+        return Ok(user);
     }
 }
