@@ -1,14 +1,18 @@
 @if(!registerMode){
-    <h4 class="text-center mt-5">Looking for your Perfect Match 💘</h4>
-    <p class="text-center lead my-4">Register to explore our Dating App</p>
-    <div class="text-center">
+<div class="mt-5">
+  <h4 class="text-center mt-5 font-wt-800">Looking for your Perfect Match 💘</h4>
+  <p class="text-center lead my-4">Register to explore our Dating App</p>
+  <div class="text-center">
     <button class="btn btn-primary mx-1" (click)="registerToggle()">
-        Start Dating 💕
+      Start Dating 💕
     </button>
     <button class="btn btn-info mx-1">Know More</button>
-    </div>
+  </div>
+</div>
 } @else{
-    <p class="text-center lead fw-normal">You've One Step to go for finding your Match</p>
-    <app-register (cancelRegister)="cancelRegisterMode($event)"></app-register>
+<p class="text-center lead fw-normal">
+  One more step to go for finding your Match
+</p>
+<app-register (cancelRegister)="cancelRegisterMode($event)"></app-register>
 
 }

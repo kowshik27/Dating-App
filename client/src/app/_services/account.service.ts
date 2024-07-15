@@ -27,9 +27,9 @@ export class AccountService {
     this.currentUser.set(null);
   }
 
-  registerSvc(model: any) {
+  registerSvc(registerModel: any) {
     return this.http
-      .post<User>(this.baseUrl + 'account/register', model)
+      .post<User>(this.baseUrl + 'account/register', registerModel)
       .pipe(
         map((user) => {
           if (user) {
