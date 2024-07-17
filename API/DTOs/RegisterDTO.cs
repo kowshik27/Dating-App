@@ -6,10 +6,12 @@ public class RegisterDTO
 {
     [MinLength(3)]
     [MaxLength(30)]
-    public required string UserName { get; set; }
+    [Required]
+    public string Username { get; set; } = "";
 
     [MinLength(4)]
     [MaxLength(30)]
-    public required string Password { get; set; }
+    [Required]
+    public string Password { get; set; } = "";
 
 }

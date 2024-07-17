@@ -2,13 +2,14 @@ import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
+import { errorInterceptor } from './_interceptor/error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
-     provideHttpClient(),
+     provideHttpClient(withInterceptors([errorInterceptor])),
     provideAnimations(), // Added for DropDown Effects
     provideToastr({
       timeOut:2200,

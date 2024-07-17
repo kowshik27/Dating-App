@@ -14,27 +14,29 @@ public class AccountController(DataContext context, ITokenService tokenService):
     [HttpPost("register")]
     public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO){
 
-        if(await UserExists(registerDTO.UserName)) return BadRequest("UserName already taken !!");
+        if(await UserExists(registerDTO.Username)) return BadRequest("UserName already taken !!");
 
-        using var hmac = new HMACSHA512();
-        var user = new User{
-            UserName = registerDTO.UserName.ToLower(),
-            PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
-            PasswordSalt = hmac.Key
-        };
+        // using var hmac = new HMACSHA512();
+        // var user = new User{
+        //     UserName = registerDTO.Username.ToLower(),
+        //     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
+        //     PasswordSalt = hmac.Key
+        // };
 
-        // Console.WriteLine("The Registered is -");
-        // Console.WriteLine(user);
+        // // Console.WriteLine("The Registered is -");
+        // // Console.WriteLine(user);
 
-        context.Users.Add(user);
-        await context.SaveChangesAsync(); 
+        // context.Users.Add(user);
+        // await context.SaveChangesAsync(); 
         
-        var username = user.UserName;
+        // var username = user.UserName;
 
-        return new UserDTO{
-            Username = username,
-            Token = tokenService.CreateToken(username),
-        };
+        // return new UserDTO{
+        //     Username = username,
+        //     Token = tokenService.CreateToken(username),
+        // };
+
+        return Ok(); // Remove it later
     }
 
     [HttpPost("login")]

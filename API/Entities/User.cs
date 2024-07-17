@@ -1,4 +1,6 @@
-﻿namespace API.Entities;
+﻿using API.Extensions;
+
+namespace API.Entities;
 
 public class User
 {
@@ -7,7 +9,38 @@ public class User
 
   public required string UserName {get; set;}
 
-  public required byte[] PasswordHash {get; set;}
+  public byte[] PasswordHash {get; set;} = [];
 
-  public required byte[] PasswordSalt {get; set;}
+  public byte[] PasswordSalt {get; set;} = [];
+  
+  // DOB, City, Country, Gender, NickName, Photo - required
+  // Intro, Phto - optional
+  // CreatedAt, LastActive -> Default values
+
+  public required string Gender { get; set; }
+
+  public required DateOnly DateOfBirth {get; set;}
+
+  public required string NickName { get; set; }
+
+  public required string City { get; set; }
+
+  public required string Country { get; set; }
+
+  public string? Introduction { get; set; }
+
+  public string? Interests { get; set; }
+
+  public string? LookingFor { get; set; }
+
+  public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+  public DateTime LastActive { get; set; } = DateTime.UtcNow;
+
+  public List<Photo> Photos { get; set; } = [];  
+
+
+  // public int GetAge(){
+  //   return DateOfBirth.CalculateAge();
+  // }
 }
