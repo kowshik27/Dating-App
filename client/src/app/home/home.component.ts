@@ -6,17 +6,16 @@ import { RegisterComponent } from '../register/register.component';
   standalone: true,
   imports: [RegisterComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  registerMode : boolean = false;
+  registerMode: boolean = false;
 
-  registerToggle(){
+  registerToggle() {
     this.registerMode = !this.registerMode;
   }
 
-  cancelRegisterMode(event:boolean){
+  cancelRegisterMode(event: boolean) {
     this.registerMode = event;
   }
-  
 }

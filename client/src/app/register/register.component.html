@@ -1,46 +1,44 @@
-<div class="form-signin w-50 m-auto">
-    <form #registerForm="ngForm" (ngSubmit)="register()">
-        <img
-          class="mb-4"
-          src="https://www.google.com/imgres?q=dating&imgurl=https%3A%2F%2Fwww.paired.com%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fmedia.graphassets.com%252FhrVHBuvOTmimn7TtEAco%26w%3D2560%26q%3D75&imgrefurl=https%3A%2F%2Fwww.paired.com%2Farticles%2Fdating-vs-relationship&docid=ANcAs7wzit03iM&tbnid=L1J9-viSL-yE1M&vet=12ahUKEwj5-qS8vp-HAxUWr1YBHcGPNRsQM3oECBsQAA..i&w=1024&h=768&hcb=2&ved=2ahUKEwj5-qS8vp-HAxUWr1YBHcGPNRsQM3oECBsQAA"
-          alt=""
-          width="72"
-          height="57"
-        />
-        <h1 class="h3 mb-3 fw-normal">Registration</h1>
-        <div class="form-floating mb-2">
-          <input
-            type="text"
-            [(ngModel)] = "registerModel.username"
-            name="username"
-            class="form-control"
-            placeholder="Username"
-          />
-          <label for="floatingInput">Username</label>
-        </div>
-        <div class="form-floating mb-2">
-          <input
-            type="password"
-            name="password"
-            [(ngModel)] = "registerModel.password"
-            class="form-control"
-            id="floatingPassword"
-            placeholder="Password"
-          />
-          <label for="floatingPassword">Password</label>
-        </div>
-        <div class="form-check text-start my-3">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value="remember-me"
-            id="flexCheckDefault"
-          />
-          <label class="form-check-label" for="flexCheckDefault"> Remember me </label>
-        </div>
-        <div class="text-center">
-          <button class="btn btn-primary mx-1 py-2" type="submit">Register</button>
-          <button class="btn btn-primary mx-1 py-2" (click)="cancel()">Cancel</button>
-        </div>
-      </form>      
+<div class="form-signin w-50 m-auto pt-4">
+  <form #registerForm="ngForm" (ngSubmit)="register()">
+    <img class="mb-4" src="/assets/logo.png" alt="" width="50" height="50" />
+    <h1 class="h3 mb-3 fw-normal">Registration</h1>
+    <div class="form-floating mb-2">
+      <input
+        type="text"
+        [(ngModel)]="registerModel.username"
+        name="username"
+        class="form-control"
+        placeholder="Username"
+      />
+      <label for="floatingInput">Username</label>
+    </div>
+    <div class="form-floating mb-2">
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="registerModel.password"
+        class="form-control"
+        id="floatingPassword"
+        placeholder="Password"
+      />
+      <label for="floatingPassword">Password</label>
+    </div>
+    <div class="form-check text-start my-3">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value="remember-me"
+        id="flexCheckDefault"
+      />
+      <label class="form-check-label" for="flexCheckDefault">
+        Remember me
+      </label>
+    </div>
+    <div class="text-center">
+      <button class="btn btn-primary mx-1 py-2" type="submit">Register</button>
+      <button class="btn btn-primary mx-1 py-2" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
 </div>

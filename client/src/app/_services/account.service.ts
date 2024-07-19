@@ -9,7 +9,7 @@ import { map } from 'rxjs';
 export class AccountService {
   private http = inject(HttpClient);
   baseUrl = 'https://localhost:5001/api/';
-  currentUser = signal<Object | null>(null);
+  currentUser = signal<User | null>(null);
 
   loginSvc(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
@@ -18,6 +18,7 @@ export class AccountService {
           localStorage.setItem('user', JSON.stringify(user));
           this.currentUser.set(user);
         }
+        return user;
       })
     );
   }

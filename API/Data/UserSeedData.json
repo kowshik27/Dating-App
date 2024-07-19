@@ -165,7 +165,7 @@
       "Country": "Liechtenstein",
       "Photos": [
         {
-          "Url": "https://randomuser.me/api/portraits/women/85.jpg",
+          "Url": "https://randomuser.me/api/portraits/women/27.jpg",
           "IsMain": true
         }
       ]
@@ -203,7 +203,7 @@
         "Country": "Netherlands",
         "Photos": [
           {
-            "Url": "https://randomuser.me/api/portraits/men/71.jpg",
+            "Url": "https://randomuser.me/api/portraits/men/27.jpg",
             "IsMain": true
           }
         ]
@@ -222,7 +222,7 @@
         "Country": "Benin",
         "Photos": [
           {
-            "Url": "https://randomuser.me/api/portraits/men/45.jpg",
+            "Url": "https://randomuser.me/api/portraits/men/19.jpg",
             "IsMain": true
           }
         ]

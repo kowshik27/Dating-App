@@ -1,1 +1,11 @@
-<p>member-list works!</p>
+<h3>Members</h3>
+<div class="row" style="height: 300px">
+  @for(member of members; track member.id){
+  <div class="col-3">
+    <app-member-card
+      [memberInfo]="member"
+      style="border-radius: 3px"
+    ></app-member-card>
+  </div>
+  }
+</div>
