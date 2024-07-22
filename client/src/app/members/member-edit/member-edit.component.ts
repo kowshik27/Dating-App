@@ -1,4 +1,10 @@
-import { Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MembersService } from '../../_services/members.service';
 import { AccountService } from '../../_services/account.service';
 import { Member } from '../../_models/member';
@@ -19,10 +25,10 @@ export default class MemberEditComponent implements OnInit {
   private toastr = inject(ToastrService);
 
   @ViewChild('editForm') editForm?: NgForm;
-  @HostListener('window:beforeunload', ['$event']) notify($event:any){
-      if(this.editForm?.dirty){
-        $event.returnValue = true;
-      }
+  @HostListener('window:beforeunload', ['$event']) notify($event: any) {
+    if (this.editForm?.dirty) {
+      $event.returnValue = true;
+    }
   }
 
   memberModel?: Member;
@@ -43,8 +49,11 @@ export default class MemberEditComponent implements OnInit {
   }
 
   updateMemberData() {
-    console.log(this.memberModel);
-    this.toastr.success('Profile Updated Successfully');
-    this.editForm?.reset(this.memberModel);
+    this.membersService.updateMember(this.editForm?.value).subscribe({
+      next: (_) => {
+        this.toastr.success('Profile Updated Successfully');
+        this.editForm?.reset(this.memberModel);
+      },
+    });
   }
 }
