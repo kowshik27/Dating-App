@@ -110,7 +110,10 @@
         </form>
       </tab>
       <tab heading="Edit Photos">
-        <h5>Photo Edits will come here !!</h5>
+        <app-photo-editor
+          [memberData]="memberModel"
+          (updatedMember)="onMemberChangeByPhotoEditor($event)"
+        ></app-photo-editor>
       </tab>
     </tabset>
   </div>

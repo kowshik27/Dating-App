@@ -2,19 +2,20 @@
 using System.Text;
 using API.Data;
 using API.DTOs;
-using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
 
-public class AccountController(DataContext context, ITokenService tokenService): MyBaseController
-{   
+public class AccountController(DataContext context, ITokenService tokenService) : MyBaseController
+{
     [HttpPost("register")]
-    public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO){
+    public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
+    {
 
-        if(await UserExists(registerDTO.Username)) return BadRequest("UserName already taken !!");
+        if (await UserExists(registerDTO.Username)) return BadRequest("UserName already taken !!");
 
         // using var hmac = new HMACSHA512();
         // var user = new User{
@@ -28,7 +29,7 @@ public class AccountController(DataContext context, ITokenService tokenService):
 
         // context.Users.Add(user);
         // await context.SaveChangesAsync(); 
-        
+
         // var username = user.UserName;
 
         // return new UserDTO{
@@ -40,10 +41,13 @@ public class AccountController(DataContext context, ITokenService tokenService):
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<UserDTO>> Login(LoginDTO loginData){
-        var user = await context.Users.FirstOrDefaultAsync(user => user.UserName == loginData.UserName.ToLower());
-        if(user == null) return Unauthorized("Invalid UserName !!");
-        
+    public async Task<ActionResult<UserDTO>> Login(LoginDTO loginData)
+    {
+        var user = await context.Users
+        .Include(u => u.Photos)
+        .FirstOrDefaultAsync(user => user.UserName == loginData.UserName.ToLower());
+        if (user == null) return Unauthorized("Invalid UserName !!");
+
         var username = user.UserName;
         var passwordsalt = user.PasswordSalt;
         var passwordhash = user.PasswordHash;
@@ -54,15 +58,18 @@ public class AccountController(DataContext context, ITokenService tokenService):
 
         for (int i = 0; i < HashedPassword.Length; i++)
         {
-            if(HashedPassword[i]!=passwordhash[i]) return Unauthorized("Invalid Password, Enter Correct Password !!");
+            if (HashedPassword[i] != passwordhash[i]) return Unauthorized("Invalid Password, Enter Correct Password !!");
         }
-        return new UserDTO{
+        return new UserDTO
+        {
             Username = username,
             Token = tokenService.CreateToken(username),
+            ProfilePhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url
         };
     }
 
-    private async Task<bool> UserExists(string UserName){
-       return await context.Users.AnyAsync(x=>x.UserName.ToLower()==UserName.ToLower());
+    private async Task<bool> UserExists(string UserName)
+    {
+        return await context.Users.AnyAsync(x => x.UserName.ToLower() == UserName.ToLower());
     }
 }

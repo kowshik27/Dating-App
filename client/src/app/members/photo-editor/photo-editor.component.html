@@ -1,0 +1,113 @@
+<div class="row">
+  @for (photo of memberData().photos; track photo.id) {
+  <div class="col-2">
+    <img src="{{ photo.url }}" alt="photo of user" class="img-thumbnail mb-1" />
+    <div class="text-center">
+      <button
+        class="btn btn-primary btn-sm me-1"
+        (click)="updateMemberPhoto(photo)"
+        [disabled]="photo.isMain"
+      >
+        Main
+      </button>
+      <button
+        class="btn btn-sm btn-danger"
+        (click)="deletePhoto(photo)"
+        [disabled]="photo.isMain"
+      >
+        <i class="fa fa-trash"></i>
+      </button>
+    </div>
+  </div>
+  }
+</div>
+
+<!-- ng2-file-upload-html-code -->
+
+<div class="row">
+  <div class="col-md-4 ms-4">
+    <h5 style="margin-bottom: 0.75rem">Upload Photo</h5>
+
+    <div
+      ng2FileDrop
+      [ngClass]="{ 'nv-file-over': hasBaseDropzoneOver }"
+      (fileOver)="fileOverBase($event)"
+      [uploader]="uploader"
+      class="card bg-faded text-center my-drop-zone"
+      style="height: 16rem; padding-top: 5.5rem"
+    >
+      <i class="fa fa-upload fa-3x"></i>
+      Drop photos here
+    </div>
+    <div class="text-center" style="margin-top: 0.8rem">(OR)</div>
+    <input
+      type="file"
+      ng2FileSelect
+      [uploader]="uploader"
+      multiple
+      style="margin-top: 0.7rem"
+    /><br />
+  </div>
+
+  <div class="col-md-7" *ngIf="uploader?.queue?.length">
+    <!-- style="margin: 2rem 0 5rem 7rem" -->
+    <h5 style="margin-bottom: 0.75rem">Upload queue</h5>
+    <p>Queue length: {{ uploader?.queue?.length }}</p>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th width="50%">Name</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of uploader?.queue">
+          <td>
+            <strong>{{ item?.file?.name }}</strong>
+          </td>
+          <td *ngIf="uploader?.options?.isHTML5" nowrap>
+            {{ item?.file?.size / 1024 / 1024 | number : ".2" }} MB
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div>
+      <div>
+        Queue progress:
+        <div class="progress">
+          <div
+            class="progress-bar"
+            role="progressbar"
+            [ngStyle]="{ width: uploader?.progress + '%' }"
+          ></div>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="btn btn-success btn-s"
+        (click)="uploader?.uploadAll()"
+        [disabled]="!uploader?.getNotUploadedItems()?.length"
+      >
+        <span class="fa fa-upload"></span> Upload all
+      </button>
+      <button
+        type="button"
+        class="btn btn-warning btn-s"
+        (click)="uploader?.cancelAll()"
+        [disabled]="!uploader?.isUploading"
+      >
+        <span class="fa fa-ban"></span> Cancel all
+      </button>
+      <button
+        type="button"
+        class="btn btn-danger btn-s"
+        (click)="uploader?.clearQueue()"
+        [disabled]="!uploader?.queue?.length"
+      >
+        <span class="fa fa-trash"></span> Remove all
+      </button>
+    </div>
+  </div>
+</div>

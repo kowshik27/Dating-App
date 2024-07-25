@@ -32,12 +32,22 @@
     </ul>
 
     <div class="dropdown ml-auto" dropdown>
-      <a class="dropdown-toggle text-ligt text-decoration-none" dropdownToggle>
-        Welcome {{ accountService.currentUser()?.username | titlecase }}
-        <!-- {{
-            accountService.currentUser().username || null
-          }} -->
-      </a>
+      <div
+        class="dropdown-toggle-wrapper"
+        style="color: antiquewhite"
+        dropdownToggle
+      >
+        <img
+          class="user-img me-2"
+          src="{{
+            accountService.currentUser()?.profilePhotoUrl || './assets/user.png'
+          }}"
+          alt="user main image"
+        />
+        <a class="dropdown-toggle text-light text-decoration-none">
+          Welcome {{ accountService.currentUser()?.username | titlecase }}
+        </a>
+      </div>
       <div
         class="dropdown-menu"
         style="transform: translateX(-30px)"
