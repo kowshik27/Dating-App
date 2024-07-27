@@ -1,28 +1,77 @@
 <div class="form-signin w-50 m-auto pt-4">
-  <form #registerForm="ngForm" (ngSubmit)="register()">
+  <form [formGroup]="registerForm" (ngSubmit)="register()">
     <img class="mb-4" src="/assets/logo.png" alt="" width="50" height="50" />
     <h1 class="h3 mb-3 fw-normal">Registration</h1>
-    <div class="form-floating mb-2">
-      <input
-        type="text"
-        [(ngModel)]="registerModel.username"
-        name="username"
-        class="form-control"
-        placeholder="Username"
-      />
-      <label for="floatingInput">Username</label>
+
+    <!-- Reusable Form Inputs -->
+
+    <div class="mb-3">
+      <label style="margin-right: 10px">I am a: </label>
+      <label class="form-check-label me-2">
+        <input
+          type="radio"
+          class="form-check-input"
+          value="male"
+          formControlName="gender"
+        />
+        Male
+      </label>
+      <label class="form-check-label">
+        <input
+          type="radio"
+          class="form-check-input"
+          value="female"
+          formControlName="gender"
+        />
+        Female
+      </label>
     </div>
-    <div class="form-floating mb-2">
-      <input
-        type="password"
-        name="password"
-        [(ngModel)]="registerModel.password"
-        class="form-control"
-        id="floatingPassword"
-        placeholder="Password"
-      />
-      <label for="floatingPassword">Password</label>
-    </div>
+
+    <app-text-input
+      [formControl]="$any(registerForm.controls['username'])"
+      label="Username"
+    >
+    </app-text-input>
+
+    <app-text-input
+      [formControl]="$any(registerForm.controls['nickName'])"
+      label="Nick Name"
+    >
+    </app-text-input>
+
+    <app-date-input
+      [formControl]="$any(registerForm.controls['dateOfBirth'])"
+      label="Date of Birth"
+      [maxDate]="maxDate"
+    >
+    </app-date-input>
+
+    <app-text-input
+      [formControl]="$any(registerForm.controls['city'])"
+      label="City"
+    >
+    </app-text-input>
+
+    <app-text-input
+      [formControl]="$any(registerForm.controls['country'])"
+      label="Country"
+    >
+    </app-text-input>
+
+    <app-text-input
+      [formControl]="$any(registerForm.controls['password'])"
+      label="Password"
+      type="password"
+    >
+    </app-text-input>
+
+    <app-text-input
+      [formControl]="$any(registerForm.controls['confirmPassword'])"
+      label="Confirm Password"
+      type="password"
+    >
+    </app-text-input>
+
     <div class="form-check text-start my-3">
       <input
         class="form-check-input"
@@ -34,11 +83,33 @@
         Remember me
       </label>
     </div>
+
+    @if(validationErrors.length){
+    <div class="alert alert-danger text-start">
+      <ul>
+        @for(err of validationErrors; track $index) {
+        <li>{{ err }}</li>
+        }
+      </ul>
+    </div>
+    }
+
     <div class="text-center">
-      <button class="btn btn-primary mx-1 py-2" type="submit">Register</button>
+      <button
+        class="btn btn-primary mx-1 py-2"
+        type="submit"
+        [disabled]="!registerForm.valid"
+      >
+        Register
+      </button>
       <button class="btn btn-primary mx-1 py-2" (click)="cancel()">
         Cancel
       </button>
     </div>
   </form>
 </div>
+
+<!-- Value Debugger Tool - Json Pipe -->
+
+<!-- <p class="lead">Form Value:{{ registerForm.value | json }}</p>
+<p class="lead">Form Status:{{ registerForm.status | json }}</p> -->

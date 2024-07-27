@@ -4,22 +4,23 @@ namespace API.Entities;
 
 public class User
 {
+
   // [Key] if don't use Id column as primary key
   public int Id { get; set; }
 
-  public required string UserName {get; set;}
+  public required string UserName { get; set; }
 
-  public byte[] PasswordHash {get; set;} = [];
+  public byte[] PasswordHash { get; set; } = [];
 
-  public byte[] PasswordSalt {get; set;} = [];
-  
+  public byte[] PasswordSalt { get; set; } = [];
+
   // DOB, City, Country, Gender, NickName, Photo - required
   // Intro, Phto - optional
   // CreatedAt, LastActive -> Default values
 
   public required string Gender { get; set; }
 
-  public required DateOnly DateOfBirth {get; set;}
+  public required DateOnly DateOfBirth { get; set; }
 
   public required string NickName { get; set; }
 
@@ -37,7 +38,7 @@ public class User
 
   public DateTime LastActive { get; set; } = DateTime.UtcNow;
 
-  public List<Photo> Photos { get; set; } = [];  
+  public List<Photo> Photos { get; set; } = [];
 
 
   // public int GetAge(){

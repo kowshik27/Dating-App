@@ -2,7 +2,7 @@
   <div class="card-img-wrapper">
     <img
       class="card-img-top"
-      src="{{ memberInfo().photoUrl }}"
+      src="{{ memberInfo().photoUrl || './assets/user.png' }}"
       alt="Card image"
     />
     <ul class="list-inline member-icons animate text-center">

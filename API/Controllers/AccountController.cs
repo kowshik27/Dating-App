@@ -2,14 +2,17 @@
 using System.Text;
 using API.Data;
 using API.DTOs;
+using API.Entities;
 using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
 
-public class AccountController(DataContext context, ITokenService tokenService) : MyBaseController
+public class AccountController(DataContext context,
+ ITokenService tokenService, IMapper mapper) : MyBaseController
 {
     [HttpPost("register")]
     public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
@@ -17,27 +20,25 @@ public class AccountController(DataContext context, ITokenService tokenService) 
 
         if (await UserExists(registerDTO.Username)) return BadRequest("UserName already taken !!");
 
-        // using var hmac = new HMACSHA512();
-        // var user = new User{
-        //     UserName = registerDTO.Username.ToLower(),
-        //     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
-        //     PasswordSalt = hmac.Key
-        // };
+        using var hmac = new HMACSHA512();
+        var user = mapper.Map<User>(registerDTO);
 
-        // // Console.WriteLine("The Registered is -");
-        // // Console.WriteLine(user);
+        user.UserName = registerDTO.Username.ToLower();
+        user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password));
+        user.PasswordSalt = hmac.Key;
 
-        // context.Users.Add(user);
-        // await context.SaveChangesAsync(); 
+        context.Users.Add(user);
+        await context.SaveChangesAsync();
 
-        // var username = user.UserName;
+        var username = user.UserName;
+        var nickName = user.NickName;
 
-        // return new UserDTO{
-        //     Username = username,
-        //     Token = tokenService.CreateToken(username),
-        // };
-
-        return Ok(); // Remove it later
+        return new UserDTO
+        {
+            Username = username,
+            NickName = nickName,
+            Token = tokenService.CreateToken(username),
+        };
     }
 
     [HttpPost("login")]
@@ -51,7 +52,7 @@ public class AccountController(DataContext context, ITokenService tokenService) 
         var username = user.UserName;
         var passwordsalt = user.PasswordSalt;
         var passwordhash = user.PasswordHash;
-
+        var nickName = user.NickName;
 
         using var hmac = new HMACSHA512(passwordsalt);
         var HashedPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginData.Password));
@@ -64,6 +65,7 @@ public class AccountController(DataContext context, ITokenService tokenService) 
         {
             Username = username,
             Token = tokenService.CreateToken(username),
+            NickName = nickName,
             ProfilePhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url
         };
     }

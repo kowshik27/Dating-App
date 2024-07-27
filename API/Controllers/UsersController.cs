@@ -54,7 +54,6 @@ public class UsersController(IUserRepository userRepository, IMapper mapper,
 
     public async Task<ActionResult<PhotoDTO>> uploadPhoto(IFormFile imgFile)
     {
-        Console.WriteLine("\nHere\n\n\n", User.GetUserName());
         var user = await userRepository.GetUserByUsernameAsync(User.GetUserName());
 
         if (user == null) return BadRequest("Username not found in DB; Upload failed!!");
@@ -69,6 +68,8 @@ public class UsersController(IUserRepository userRepository, IMapper mapper,
             PublicId = result.PublicId
         };
 
+        if (user.Photos.Count == 0) photo.IsMain = true;
+
         user.Photos.Add(photo);
 
         if (await userRepository.SaveAllAsync()) return
@@ -81,13 +82,10 @@ public class UsersController(IUserRepository userRepository, IMapper mapper,
     [HttpPut("set-profile-photo/{photoId}")]
     public async Task<ActionResult> SetProfilePhoto(int photoId)
     {
-        Console.WriteLine("In Profile Photo Method");
         var user = await userRepository.GetUserByUsernameAsync(User.GetUserName());
         if (user == null) return BadRequest("User doesn't exists !!");
 
         var photo = user.Photos.FirstOrDefault(p => p.Id == photoId);
-
-        Console.WriteLine("\n\n\nIam Here\n", photo);
 
         if (photo == null || photo.IsMain) return BadRequest("Cannot set the image as Main Photo");
 
