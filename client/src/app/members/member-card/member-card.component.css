@@ -37,3 +37,31 @@
 .animate {
     transition: all 0.15s ease-in-out;
 }
+
+.view-more-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .view-more-button:hover,
+  .view-more-button:focus {
+    color: #0056b3;
+  }
+  
+  .view-more-button i {
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+  }
+  
+  .view-more-button.expanded i {
+    transform: rotate(180deg);
+  }
+  

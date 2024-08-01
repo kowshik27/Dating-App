@@ -32,12 +32,14 @@ public class AccountController(DataContext context,
 
         var username = user.UserName;
         var nickName = user.NickName;
+        var userId = user.Id;
 
         return new UserDTO
         {
             Username = username,
             NickName = nickName,
-            Token = tokenService.CreateToken(username),
+            Gender = user.Gender,
+            Token = tokenService.CreateToken(username, userId),
         };
     }
 
@@ -53,6 +55,7 @@ public class AccountController(DataContext context,
         var passwordsalt = user.PasswordSalt;
         var passwordhash = user.PasswordHash;
         var nickName = user.NickName;
+        var userId = user.Id;
 
         using var hmac = new HMACSHA512(passwordsalt);
         var HashedPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginData.Password));
@@ -64,10 +67,12 @@ public class AccountController(DataContext context,
         return new UserDTO
         {
             Username = username,
-            Token = tokenService.CreateToken(username),
+            Token = tokenService.CreateToken(username, userId),
             NickName = nickName,
+            Gender = user.Gender,   
             ProfilePhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url
         };
+        
     }
 
     private async Task<bool> UserExists(string UserName)

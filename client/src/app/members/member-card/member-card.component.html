@@ -26,23 +26,26 @@
   </div>
   <div class="card-body p-1">
     <h4 class="card-title text-center mb-1">
-      <!-- @if(memberInfo().gender=="male") {<span class="fs-6">
-        <i class="fa fa-solid fa-mars" style="color: rgb(13, 166, 226)"></i>
-      </span>
-      } @else {<span class="fs-6"
-        ><i class="fa fa-solid fa-venus" style="color: pink"></i></span
-      >} -->
-
-      {{ memberInfo().nickName }}
+      {{ memberInfo().nickName }},
+      <span class="lead">{{ memberInfo().age }}</span>
     </h4>
-
     <p class="card-text text-center text-muted text-wrap">
       <i class="fa-solid fa-location-dot" style="color: rgb(238, 75, 53)"></i>
       {{ memberInfo().city }}
     </p>
 
-    <p class="card-text text-center text-muted text-wrap">
-      {{ memberInfo().introduction }}
-    </p>
+    @if(memberInfo().introduction){
+      <p class="card-text text-center text-muted text-wrap">
+        {{ isExpanded ? fullIntro : shortIntro }}
+      </p>
+      <div class="text-center">
+        <button class="view-more-button" (click)="toggleIntro()">
+          {{ isExpanded ? "View Less" : "View More"
+          }}<i
+            class="fa {{ isExpanded ? 'fa-chevron-up' : 'fa-chevron-down' }}"
+          ></i>
+        </button>
+      </div>
+    }
   </div>
 </div>

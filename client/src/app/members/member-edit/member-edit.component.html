@@ -42,11 +42,15 @@
         </div>
         <div>
           <strong class="text-info">Last Active:</strong>
-          <p class="text-primary-emphasis">{{ memberModel.lastActive }}</p>
+          <p class="text-primary-emphasis">
+            {{ memberModel.lastActive | timeago }}
+          </p>
         </div>
         <div>
           <strong class="text-info">Member since:</strong>
-          <p class="text-primary-emphasis">{{ memberModel.createdAt }}</p>
+          <p class="text-primary-emphasis">
+            {{ memberModel.createdAt | date : "dd MMMM, YYYY" }}
+          </p>
         </div>
       </div>
       <!-- <div class="card-footer">

@@ -78,7 +78,9 @@ export class PhotoEditorComponent implements OnInit {
 
         // Making changes in the memberData from edit-profie comp
         updatedMemberData.photos.forEach((p) => {
-          if (p.id == photo.id) p.isMain = true;
+          if (p.id == photo.id) {
+            p.isMain = true;
+          }
         });
 
         this.updatedMember.emit(updatedMemberData);
@@ -102,8 +104,11 @@ export class PhotoEditorComponent implements OnInit {
 
         // Making changes in the memberData from edit-profie comp
         updatedMemberData.photos.forEach((p) => {
-          if (p.isMain) p.isMain = false;
-          else if (p.id == photo.id) p.isMain = true;
+          if (p.isMain) {
+            p.isMain = false;
+          } else if (p.id == photo.id) {
+            p.isMain = true;
+          }
         });
 
         this.updatedMember.emit(updatedMemberData);
@@ -113,7 +118,7 @@ export class PhotoEditorComponent implements OnInit {
 
   deletePhoto(photo: Photo) {
     this.membersService.deletePhotoSvc(photo).subscribe({
-      next: (_) => {
+      next: (_: any) => {
         const updatedMemberData = { ...this.memberData() };
         updatedMemberData.photos = updatedMemberData.photos.filter(
           (p) => p.id !== photo.id

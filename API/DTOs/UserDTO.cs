@@ -6,4 +6,5 @@ public class UserDTO
     public required string NickName { get; set; }
     public required string Token { get; set; }
     public string? ProfilePhotoUrl { get; set; }
+    public required string Gender { get; set; }
 }

@@ -8,7 +8,7 @@ namespace API.Services;
 
 public class TokenService(IConfiguration config) : ITokenService
 {
-    public string CreateToken(string Username)
+    public string CreateToken(string username, int userId)
     {
         var TokenKey = config["TokenKey"] ?? throw new Exception("Cannot access token key from appsettings");
         if (TokenKey.Length < 64) throw new Exception("Token Key must be longer, Make it more than 64 chars !!");
@@ -16,7 +16,8 @@ public class TokenService(IConfiguration config) : ITokenService
         var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenKey));
 
         var Claims = new List<Claim>{
-            new(ClaimTypes.NameIdentifier, Username)
+            new(ClaimTypes.NameIdentifier, userId.ToString()),
+            new(ClaimTypes.Name, username),
         };
 
         var Creds = new SigningCredentials(Key, SecurityAlgorithms.HmacSha512Signature);

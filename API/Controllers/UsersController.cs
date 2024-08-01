@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using API.Extensions;
 using System.Security.Claims;
+using API.Helpers;
 
 namespace API.Controllers;
 
@@ -20,9 +21,13 @@ public class UsersController(IUserRepository userRepository, IMapper mapper,
 {
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] UserParams userParams)
     {
-        var members = await userRepository.GetMembersAsync();
+        userParams.CurrentUsername = User.GetUserName();
+        var members = await userRepository.GetMembersAsync(userParams);
+
+        Response.AddPaginationHeader(members);
+
         return Ok(members);
     }
 
@@ -52,7 +57,7 @@ public class UsersController(IUserRepository userRepository, IMapper mapper,
 
     [HttpPost("upload-photo")]
 
-    public async Task<ActionResult<PhotoDTO>> uploadPhoto(IFormFile imgFile)
+    public async Task<ActionResult<PhotoDTO>> UploadPhoto(IFormFile imgFile)
     {
         var user = await userRepository.GetUserByUsernameAsync(User.GetUserName());
 

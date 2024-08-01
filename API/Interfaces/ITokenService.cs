@@ -2,5 +2,5 @@
 
 public interface ITokenService
 {
-    string CreateToken(string Username);
+    string CreateToken(string Username, int userId);
 }

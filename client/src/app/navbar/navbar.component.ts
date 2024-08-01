@@ -23,12 +23,10 @@ export class NavbarComponent {
   title = 'Dating App 💖';
 
   login() {
-    // console.log(this.model);
     this.accountService.loginSvc(this.model).subscribe({
       next: () => {
         this.router.navigateByUrl('/members');
         this.username = this.accountService.currentUser();
-        console.log("Login Success");
       },
       error: (err) => {
         console.log(`Error ocuured - ${err}\n`, err);
