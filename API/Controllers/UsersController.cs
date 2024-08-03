@@ -10,8 +10,6 @@ using API.Helpers;
 
 namespace API.Controllers;
 
-[ApiController]
-[Route("/api/[controller]")]  // /api/users
 
 [Authorize]
 
