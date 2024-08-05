@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -19,29 +20,6 @@ public class LikesRepository(DataContext context, IMapper mapper) : ILikesReposi
         context.Likes.Remove(like);
     }
 
-    public async Task<IEnumerable<MemberDTO>> GetLikedByOtherUsers(int userId)
-    {
-        var likes = context.Likes.AsQueryable();
-
-        return await likes
-        .Where(t => t.TargetUserId == userId)
-        .Select(s => s.SourceUser)
-        .ProjectTo<MemberDTO>(mapper.ConfigurationProvider)
-        .ToListAsync();
-    }
-
-    public async Task<IEnumerable<MemberDTO>> GetMutualLikes(int userId)
-    {
-        var likes = context.Likes.AsQueryable();
-        var likedIds = await GetUserLikedProfileIds(userId); // Gets User Liked Profile Ids
-
-        return await likes
-        .Where(x => x.TargetUserId == userId && likedIds.Contains(x.SourceUserId))
-        .Select(s => s.SourceUser)
-        .ProjectTo<MemberDTO>(mapper.ConfigurationProvider)
-        .ToListAsync();
-    }
-
 
     public async Task<UserLike?> GetUserLike(int sourceUserId, int targetUserId)
     {
@@ -56,15 +34,36 @@ public class LikesRepository(DataContext context, IMapper mapper) : ILikesReposi
         .ToListAsync();
     }
 
-    public async Task<IEnumerable<MemberDTO>> GetUserLikedProfiles(int userId)
+    public async Task<PagedList<MemberDTO>> GetAllUserLikes(LikesParams likesParams)
     {
         var likes = context.Likes.AsQueryable();
+        IQueryable<MemberDTO> query;
 
-        return await likes
-        .Where(s => s.SourceUserId == userId)
-        .Select(t => t.TargetUser)
-        .ProjectTo<MemberDTO>(mapper.ConfigurationProvider)
-        .ToListAsync();
+
+        switch (likesParams.Predicate)
+        {
+            case "liked":
+                query = likes
+            .Where(s => s.SourceUserId == likesParams.UserId)
+            .Select(t => t.TargetUser)
+            .ProjectTo<MemberDTO>(mapper.ConfigurationProvider);
+                break;
+            case "likedBy":
+                query = likes
+            .Where(t => t.TargetUserId == likesParams.UserId)
+            .Select(s => s.SourceUser)
+            .ProjectTo<MemberDTO>(mapper.ConfigurationProvider);
+                break;
+            default:
+                var likedIds = await GetUserLikedProfileIds(likesParams.UserId); // Gets User Liked Profile Ids
+                query = likes
+            .Where(x => x.TargetUserId == likesParams.UserId && likedIds.Contains(x.SourceUserId))
+            .Select(s => s.SourceUser)
+            .ProjectTo<MemberDTO>(mapper.ConfigurationProvider);
+                break;
+        }
+
+        return await PagedList<MemberDTO>.CreateAsync(query, likesParams.PageNumber, likesParams.PageSize);
     }
 
     public async Task<bool> SaveChanges()

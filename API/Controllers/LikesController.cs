@@ -1,6 +1,7 @@
 ﻿using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,21 +42,16 @@ public class LikesController(ILikesRepository likesRepository) : MyBaseControlle
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDTO>>> GetLikesInfo(string predicate)
+    public async Task<ActionResult<IEnumerable<MemberDTO>>> GetLikesInfo([FromQuery] LikesParams likesParams)
     {
-        int userId = User.GetUserId();
-        if (predicate == "liked")
-        {
-            return Ok(await likesRepository.GetUserLikedProfiles(userId));
-        }
-        else if (predicate == "likedBy")
-        {
-            return Ok(await likesRepository.GetLikedByOtherUsers(userId));
-        }
-        else
-        {
-            return Ok(await likesRepository.GetMutualLikes(userId));
-        }
+        likesParams.UserId = User.GetUserId();
+        likesParams.PageSize = 4;
+
+        var members = await likesRepository.GetAllUserLikes(likesParams);
+
+        Response.AddPaginationHeader(members);
+
+        return Ok(members);
     }
 
     [HttpGet("list")]

@@ -1,6 +1,7 @@
-import { Component, input, OnInit } from '@angular/core';
+import { Component, computed, inject, input, OnInit } from '@angular/core';
 import { Member } from '../../_models/member';
 import { RouterLink } from '@angular/router';
+import { LikesService } from '../../_services/likes.service';
 
 @Component({
   selector: 'app-member-card',
@@ -10,10 +11,17 @@ import { RouterLink } from '@angular/router';
   styleUrl: './member-card.component.css',
 })
 export class MemberCardComponent implements OnInit {
+  private likesService = inject(LikesService);
+
   shortIntro: string = '';
   fullIntro: string = '';
   isExpanded = false;
   memberInfo = input.required<Member>();
+
+  //Computed Signal
+  hasLiked = computed(() =>
+    this.likesService.likedUserIds().includes(this.memberInfo().id)
+  );
 
   ngOnInit(): void {
     this.shortIntro = this.memberInfo().introduction?.substring(0, 35);
@@ -22,5 +30,23 @@ export class MemberCardComponent implements OnInit {
 
   toggleIntro() {
     this.isExpanded = !this.isExpanded;
+  }
+
+  toggleLike() {
+    this.likesService.toggleLikeSvc(this.memberInfo().id).subscribe({
+      next: () => {
+        if (this.hasLiked()) {
+          this.likesService.likedUserIds.update((ids) =>
+            ids.filter((x) => x != this.memberInfo().id)
+          );
+          window.location.reload();
+        } else {
+          this.likesService.likedUserIds.update((ids) => [
+            ...ids,
+            this.memberInfo().id,
+          ]);
+        }
+      },
+    });
   }
 }

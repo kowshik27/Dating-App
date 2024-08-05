@@ -15,7 +15,9 @@
         </button>
       </li>
       <li class="list-inline-item me-6">
-        <button class="btn btn-primary"><i class="fa fa-heart"></i></button>
+        <button class="btn btn-primary" (click)="toggleLike()">
+          <i class="fa fa-heart"></i>
+        </button>
       </li>
       <li class="list-inline-item me-6">
         <button class="btn btn-primary">
@@ -28,24 +30,27 @@
     <h4 class="card-title text-center mb-1">
       {{ memberInfo().nickName }},
       <span class="lead">{{ memberInfo().age }}</span>
+      @if(hasLiked()){
+      <i class="fa fa-heart ms-3" style="color: red"></i>
+      }
     </h4>
     <p class="card-text text-center text-muted text-wrap">
-      <i class="fa-solid fa-location-dot" style="color: rgb(238, 75, 53)"></i>
+      <i class="fa-solid fa-location-dot" style="color: rgb(34, 105, 238)"></i>
       {{ memberInfo().city }}
     </p>
 
     @if(memberInfo().introduction){
-      <p class="card-text text-center text-muted text-wrap">
-        {{ isExpanded ? fullIntro : shortIntro }}
-      </p>
-      <div class="text-center">
-        <button class="view-more-button" (click)="toggleIntro()">
-          {{ isExpanded ? "View Less" : "View More"
-          }}<i
-            class="fa {{ isExpanded ? 'fa-chevron-up' : 'fa-chevron-down' }}"
-          ></i>
-        </button>
-      </div>
+    <p class="card-text text-center text-muted text-wrap">
+      {{ isExpanded ? fullIntro : shortIntro }}
+    </p>
+    <div class="text-center">
+      <button class="view-more-button" (click)="toggleIntro()">
+        {{ isExpanded ? "View Less" : "View More"
+        }}<i
+          class="fa {{ isExpanded ? 'fa-chevron-up' : 'fa-chevron-down' }}"
+        ></i>
+      </button>
+    </div>
     }
   </div>
 </div>
