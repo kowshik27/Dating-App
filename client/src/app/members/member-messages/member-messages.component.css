@@ -1,0 +1,9 @@
+.inbox-gradient{
+    background: linear-gradient(135deg, #517aeb, #7cfa86);
+}
+
+.mask-custom {
+    background-color: rgba(45, 0, 243, 0.35); /* A soft white with slight transparency */
+    border-radius: 10px; /* Optional: to give it a rounded feel */
+    border: 0.18rem solid rgb(0, 0, 0); /* Optional: a light border to define the card */
+}

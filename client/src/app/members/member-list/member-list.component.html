@@ -60,7 +60,9 @@
             btnRadio="lastActive"
             style="background-color: rgb(176, 179, 8)"
             [(ngModel)]="membersService.userParams().orderBy"
-            [ngClass]="{ 'active': membersService.userParams().orderBy === 'lastActive' }"
+            [ngClass]="{
+              active: membersService.userParams().orderBy === 'lastActive'
+            }"
           >
             Last Active
           </button>
@@ -72,7 +74,9 @@
             (click)="loadMembers()"
             btnRadio="created"
             [(ngModel)]="membersService.userParams().orderBy"
-            [ngClass]="{ 'active': membersService.userParams().orderBy === 'created' }"
+            [ngClass]="{
+              active: membersService.userParams().orderBy === 'created'
+            }"
           >
             Newest Members
           </button>
@@ -96,6 +100,7 @@
       [itemsPerPage]="
         (membersService.paginatedResult()?.pagination)!.itemsPerPage
       "
+      [(ngModel)]="(membersService.paginatedResult()?.pagination)!.currentPage"
       (pageChanged)="pageChanged($event)"
       [maxSize]="5"
       previousText="&lsaquo;"

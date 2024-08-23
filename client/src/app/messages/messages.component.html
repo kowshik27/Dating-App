@@ -1,1 +1,123 @@
-<p>messages works!</p>
+<div class="container mt-3">
+  <div class="d-flex">
+    <div class="btn-group d-flex">
+      <button
+        class="btn btn-primary"
+        [(ngModel)]="container"
+        btnRadio="Unread"
+        (click)="loadMessages()"
+      >
+        Unread
+      </button>
+      <button
+        class="btn btn-primary"
+        [(ngModel)]="container"
+        btnRadio="Inbox"
+        (click)="loadMessages()"
+      >
+        Inbox
+      </button>
+      <button
+        class="btn btn-primary"
+        [(ngModel)]="container"
+        btnRadio="Outbox"
+        (click)="loadMessages()"
+      >
+        Outbox
+      </button>
+    </div>
+  </div>
+</div>
+
+<table class="table table-hover mt-4" style="cursor: pointer">
+  @if(!messageService.paginatedResult()?.items ||
+  messageService.paginatedResult()?.items?.length===0){
+  <h4 class="text-light text-center mt-4">No Messages Yet...</h4>
+  } @else { @if(isOutbox){
+  <thead>
+    <tr>
+      <th style="width: 40%">Message</th>
+      <th style="width: 20%">To</th>
+      <th style="width: 20%">Sent On</th>
+      <th style="width: 20%"></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (message of messageService.paginatedResult()?.items; track message.id)
+    {
+    <tr routerLink="{{ getRouterLink(message) }}">
+      <th>{{ message.content }}</th>
+      <th>
+        <div>
+          <img
+            [src]="message.receiverPhotoUrl || './assets/user.png'"
+            class="rounded-circle me-2"
+          />
+          <span style="font-weight: 600">{{ message.receiverUsername }}</span>
+        </div>
+      </th>
+      <th>{{ message.messageSent | timeago }}</th>
+      <th (click)="$event.stopPropagation()">
+        <button (click)="deleteMessage(message.id)" class="btn btn-danger">
+          Delete
+        </button>
+      </th>
+    </tr>
+    }
+  </tbody>
+
+  } @else{
+  <thead>
+    <tr>
+      <th style="width: 40%">Message</th>
+      <th style="width: 20%">From</th>
+      <th style="width: 20%">Received</th>
+      <th style="width: 20%"></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (message of messageService.paginatedResult()?.items; track message.id)
+    {
+    <tr
+      routerLink="{{ getRouterLink(message) }}"
+      [queryParams]="{ tab: 'Messages' }"
+    >
+      <th>{{ message.content }}</th>
+      <th>
+        <div>
+          <img
+            [src]="message.senderPhotoUrl || './assets/user.png'"
+            class="rounded-circle me-2"
+          />
+          <span style="font-weight: 600">{{ message.senderUsername }}</span>
+        </div>
+      </th>
+      <th>{{ message.messageSent | timeago }}</th>
+      <th><button class="btn btn-danger">Delete</button></th>
+    </tr>
+    }
+  </tbody>
+  } }
+</table>
+
+@if(messageService.paginatedResult()?.pagination &&
+messageService.paginatedResult()?.pagination!.totalItems>0 ){
+<div class="d-flex justify-content-center">
+  <pagination
+    [boundaryLinks]="true"
+    [totalItems]="(messageService.paginatedResult()?.pagination)!.totalItems"
+    [itemsPerPage]="
+      (messageService.paginatedResult()?.pagination)!.itemsPerPage
+    "
+    (pageChanged)="pageChanged($event)"
+    [maxSize]="5"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;"
+  >
+  </pagination>
+</div>
+}
+
+<div></div>
