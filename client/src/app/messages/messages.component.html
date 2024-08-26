@@ -33,7 +33,9 @@
   @if(!messageService.paginatedResult()?.items ||
   messageService.paginatedResult()?.items?.length===0){
   <h4 class="text-light text-center mt-4">No Messages Yet...</h4>
-  } @else { @if(isOutbox){
+  } @else {
+  <!-----------------------OUTBOX--------->
+  @if(isOutbox){
   <thead>
     <tr>
       <th style="width: 40%">Message</th>
@@ -46,8 +48,8 @@
     @for (message of messageService.paginatedResult()?.items; track message.id)
     {
     <tr routerLink="{{ getRouterLink(message) }}">
-      <th>{{ message.content }}</th>
-      <th>
+      <td>{{ message.content }}</td>
+      <td>
         <div>
           <img
             [src]="message.receiverPhotoUrl || './assets/user.png'"
@@ -55,13 +57,13 @@
           />
           <span style="font-weight: 600">{{ message.receiverUsername }}</span>
         </div>
-      </th>
-      <th>{{ message.messageSent | timeago }}</th>
-      <th (click)="$event.stopPropagation()">
+      </td>
+      <td>{{ message.messageSent | timeago }}</td>
+      <td (click)="$event.stopPropagation()">
         <button (click)="deleteMessage(message.id)" class="btn btn-danger">
           Delete
         </button>
-      </th>
+      </td>
     </tr>
     }
   </tbody>
@@ -82,8 +84,8 @@
       routerLink="{{ getRouterLink(message) }}"
       [queryParams]="{ tab: 'Messages' }"
     >
-      <th>{{ message.content }}</th>
-      <th>
+      <td>{{ message.content }}</td>
+      <td>
         <div>
           <img
             [src]="message.senderPhotoUrl || './assets/user.png'"
@@ -91,9 +93,13 @@
           />
           <span style="font-weight: 600">{{ message.senderUsername }}</span>
         </div>
-      </th>
-      <th>{{ message.messageSent | timeago }}</th>
-      <th><button class="btn btn-danger">Delete</button></th>
+      </td>
+      <td>{{ message.messageSent | timeago }}</td>
+      <td (click)="$event.stopPropagation()">
+        <button (click)="deleteMessage(message.id)" class="btn btn-danger">
+          Delete
+        </button>
+      </td>
     </tr>
     }
   </tbody>

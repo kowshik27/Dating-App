@@ -40,6 +40,7 @@ export default class MessagesComponent implements OnInit {
   }
 
   deleteMessage(id: number) {
+    console.log('Delete Button Clicked..', id);
     this.messageService.deleteMessageSvc(id).subscribe({
       next: (_) => {
         this.messageService.paginatedResult.update((x) => {
