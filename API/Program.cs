@@ -1,9 +1,11 @@
 using System.Text;
 using API;
 using API.Data;
+using API.Entities;
 using API.Extensions;
 using API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -17,6 +19,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod()
     .WithOrigins("http://localhost:4200", "https://localhost:4200"));
 
@@ -33,8 +36,10 @@ var customServices = scope.ServiceProvider;
 try
 {
     var context = customServices.GetRequiredService<DataContext>();
+    var userManager = customServices.GetRequiredService<UserManager<User>>();
+    var roleManager = customServices.GetRequiredService<RoleManager<AppRole>>();
     await context.Database.MigrateAsync();
-    await Seed.SeedUsers(context);
+    await Seed.SeedUsers(userManager, roleManager);
 }
 catch (Exception ex)
 {

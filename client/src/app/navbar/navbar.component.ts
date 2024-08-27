@@ -5,11 +5,19 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { HasRoleDirective } from '../_directives/has-role.directive';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [FormsModule, BsDropdownModule, RouterLink, RouterLinkActive, CommonModule],
+  imports: [
+    FormsModule,
+    BsDropdownModule,
+    RouterLink,
+    RouterLinkActive,
+    CommonModule,
+    HasRoleDirective,
+  ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
@@ -18,7 +26,7 @@ export class NavbarComponent {
   private router = inject(Router);
   private toastrSvc = inject(ToastrService);
 
-  username : any;
+  username: any;
   model: any = {};
   title = 'Dating App 💖';
 
@@ -35,7 +43,7 @@ export class NavbarComponent {
     });
   }
 
-  logout(){
+  logout() {
     this.accountService.logoutSvc();
     this.router.navigateByUrl('/');
   }

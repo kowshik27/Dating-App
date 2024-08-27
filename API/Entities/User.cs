@@ -1,17 +1,9 @@
-﻿namespace API.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class User
+namespace API.Entities;
+
+public class User : IdentityUser<int>
 {
-
-  // [Key] if don't use Id column as primary key
-  public int Id { get; set; }
-
-  public required string UserName { get; set; }
-
-  public byte[] PasswordHash { get; set; } = [];
-
-  public byte[] PasswordSalt { get; set; } = [];
-
   // DOB, City, Country, Gender, NickName, Photo - required
   // Intro, Phto - optional
   // CreatedAt, LastActive -> Default values
@@ -45,4 +37,6 @@ public class User
   public List<Message> MessagesSent { get; set; } = [];
 
   public List<Message> MessagesReceived { get; set; } = [];
+
+  public ICollection<AppUserRole> UserRoles { get; set; } = [];
 }

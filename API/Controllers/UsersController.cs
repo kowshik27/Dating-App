@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using API.Extensions;
 using System.Security.Claims;
 using API.Helpers;
+using CloudinaryDotNet.Actions;
 
 namespace API.Controllers;
 
@@ -28,7 +29,6 @@ public class UsersController(IUserRepository userRepository, IMapper mapper,
 
         return Ok(members);
     }
-
 
     [HttpGet("{username}")]
     public async Task<ActionResult<User>> GetUser(string username)

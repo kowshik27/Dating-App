@@ -10,15 +10,22 @@ import { jwtInterceptor } from './_interceptor/jwt.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { loadingInterceptor } from './_interceptor/loading.interceptor';
 import { TimeagoModule } from 'ngx-timeago';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor])),
+    provideHttpClient(
+      withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor])
+    ),
     provideAnimations(), // Added for DropDown Effects
     provideToastr({
       timeOut: 2200,
     }),
-    importProvidersFrom(NgxSpinnerModule,TimeagoModule.forRoot()),
+    importProvidersFrom(
+      NgxSpinnerModule,
+      TimeagoModule.forRoot(),
+      ModalModule.forRoot()
+    ),
   ],
 };

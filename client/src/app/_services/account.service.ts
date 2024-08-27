@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../_models/user';
 import { map } from 'rxjs';
 import { LikesService } from './likes.service';
@@ -12,6 +12,15 @@ export class AccountService {
   private likesService = inject(LikesService);
   baseUrl = 'https://localhost:5001/api/';
   currentUser = signal<User | null>(null);
+  roles = computed(() => {
+    const user = this.currentUser();
+    if (user && user.token) {
+      const role = JSON.parse(atob(user.token.split('.')[1])).role;
+
+      return Array.isArray(role) ? role : [role];
+    }
+    return [];
+  });
 
   loginSvc(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(

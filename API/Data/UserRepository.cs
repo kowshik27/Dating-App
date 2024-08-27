@@ -13,7 +13,7 @@ public class UserRepository(DataContext context, IMapper mapper) : IUserReposito
     public async Task<MemberDTO?> GetMemberByNameAsync(string username)
     {
         return await context.Users
-        .Where(x => x.UserName == username.ToLower())
+        .Where(x => x.NormalizedUserName == username.ToUpper())
         .ProjectTo<MemberDTO>(mapper.ConfigurationProvider)
         .SingleOrDefaultAsync();
     }
@@ -24,22 +24,22 @@ public class UserRepository(DataContext context, IMapper mapper) : IUserReposito
 
         query = query.Where(x => x.UserName != userParams.CurrentUsername);
 
-        if (userParams.Gender != null)
+        if (userParams.Gender != null && userParams.Gender != "")
         {
             query = query.Where(x => x.Gender == userParams.Gender);
         }
 
-        var minDob = DateOnly.FromDateTime(DateTime.Now).AddYears(-userParams.MaxAge -1);
+        var minDob = DateOnly.FromDateTime(DateTime.Now).AddYears(-userParams.MaxAge - 1);
         var maxDob = DateOnly.FromDateTime(DateTime.Now).AddYears(-userParams.MinAge);
 
-        query = query.Where(x=>x.DateOfBirth>minDob && x.DateOfBirth<maxDob);
+        query = query.Where(x => x.DateOfBirth > minDob && x.DateOfBirth < maxDob);
 
         query = userParams.OrderBy switch
         {
-            "created" => query.OrderByDescending(x=>x.CreatedAt),
-            _ => query.OrderByDescending(x=>x.LastActive)
+            "created" => query.OrderByDescending(x => x.CreatedAt),
+            _ => query.OrderByDescending(x => x.LastActive)
         };
-        
+
 
         return await PagedList<MemberDTO>.CreateAsync(query.ProjectTo<MemberDTO>(mapper.ConfigurationProvider),
          userParams.PageNumber, userParams.PageSize);
@@ -53,7 +53,7 @@ public class UserRepository(DataContext context, IMapper mapper) : IUserReposito
     {
         return await context.Users
         .Include(x => x.Photos)
-        .SingleOrDefaultAsync(x => x.UserName == username.ToLower());
+        .SingleOrDefaultAsync(x => x.NormalizedUserName == username.ToUpper());
     }
 
     public async Task<IEnumerable<User>> GetUsersAsync()

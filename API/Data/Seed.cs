@@ -1,17 +1,17 @@
 ﻿using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using API.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
 public class Seed()
 {
-    public static async Task SeedUsers(DataContext context)
+    public static async Task SeedUsers(UserManager<User> userManager, RoleManager<AppRole> roleManager)
     {
 
-        if (await context.Users.AnyAsync())
+        if (await userManager.Users.AnyAsync())
         {
             Console.WriteLine("Users table is not empty!!");
             return;
@@ -25,16 +25,40 @@ public class Seed()
 
         if (users == null) return;
 
-        foreach (var user in users)
+        var roles = new List<AppRole>
         {
-            using var hmac = new HMACSHA512();
-            user.UserName = user.UserName.ToLower();
-            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("1234"));
-            user.PasswordSalt = hmac.Key;
+            new() {Name="Member"},
+            new() {Name="Moderator"},
+            new AppRole{Name="Admin"},
+            new() {Name="Tester"}
+        };
 
-            context.Users.Add(user);
+        foreach (var role in roles)
+        {
+            await roleManager.CreateAsync(role);
         }
 
-        await context.SaveChangesAsync();
+
+        foreach (var user in users)
+        {
+            user.UserName = user.UserName!.ToLower();
+            await userManager.CreateAsync(user, "0p9o8i&U");
+            await userManager.AddToRoleAsync(user, "Member");
+        }
+
+        // Creating Admin User
+
+        var admin = new User
+        {
+            UserName = "admin",
+            NickName = "Admin",
+            Gender = "",
+            City = "",
+            Country = "",
+            DateOfBirth = DateOnly.FromDateTime(DateTime.Now).AddYears(-40)
+        };
+
+        await userManager.CreateAsync(admin, "0p9o8i&U");
+        await userManager.AddToRolesAsync(admin, ["Admin", "Moderator"]);
     }
 }
