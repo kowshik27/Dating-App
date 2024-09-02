@@ -32,8 +32,14 @@
   </div>
   <div class="card-body p-1">
     <h4 class="card-title text-center mb-1">
+      @if(isOnlineNow()){
+      <span class="is-online">
+        <i class="fa fa-solid fa-circle"></i>
+      </span>
+      }
       {{ memberInfo().nickName }},
       <span class="lead">{{ memberInfo().age }}</span>
+
       @if(hasLiked()){
       <i class="fa fa-heart ms-3" style="color: red"></i>
       }

@@ -12,6 +12,7 @@ export class RolesModalComponent {
   bsModalRef = inject(BsModalRef);
   title = '';
   username = '';
+  roles: string[] = [];
   availableRoles: string[] = [];
   selectedRoles: string[] = [];
   rolesUpdated: boolean = false;

@@ -25,5 +25,11 @@ public class AutoMapperProfiles : Profile
         CreateMap<MemberUpdateDTO, User>();
         CreateMap<RegisterDTO, User>();
         CreateMap<string, DateOnly>().ConvertUsing(s => DateOnly.Parse(s));
+        // For getting UTC format dates from Sqlite
+        CreateMap<DateTime, DateTime>()
+        .ConvertUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
+        // When  Optional Dates are present
+        CreateMap<DateTime?, DateTime?>()
+        .ConvertUsing(d => d.HasValue ? DateTime.SpecifyKind(d.Value, DateTimeKind.Utc) : null);
     }
 }

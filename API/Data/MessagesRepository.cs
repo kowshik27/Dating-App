@@ -11,6 +11,13 @@ namespace API.Data;
 public class MessagesRepository(DataContext context,
 IMapper mapper) : IMessagesRepository
 {
+
+
+    public void AddGroup(Group group)
+    {
+        context.Groups.Add(group);
+    }
+
     public void AddMessage(Message message)
     {
         context.Messages.Add(message);
@@ -40,6 +47,26 @@ IMapper mapper) : IMessagesRepository
 
     }
 
+    public async Task<Connection?> GetConnection(string connectionId)
+    {
+        return await context.Connections.FindAsync(connectionId);
+    }
+
+    public async Task<Group?> GetGroup(string grpName)
+    {
+        return await context.Groups
+        .Include(x => x.Connections)
+        .FirstOrDefaultAsync(x => x.Name == grpName);
+    }
+
+    public async Task<Group?> GetGroupFromConnection(string connectionID)
+    {
+        return await context.Groups
+        .Include(x => x.Connections)
+        .Where(x => x.Connections.Any(x => x.ConnectionId == connectionID))
+        .FirstOrDefaultAsync();
+    }
+
     public async Task<Message?> GetMessage(int id)
     {
         return await context.Messages.FindAsync(id);
@@ -48,11 +75,10 @@ IMapper mapper) : IMessagesRepository
     public async Task<IEnumerable<MessageDTO>> GetMessageThread(string currentUsername, string receiverUsername)
     {
         var query = await context.Messages
-        .Include(x => x.Sender).ThenInclude(x => x.Photos)
-        .Include(x => x.Receiver).ThenInclude(x => x.Photos)
         .Where(x => x.SenderUsername == currentUsername && x.ReceiverUsername == receiverUsername
         || x.ReceiverUsername == currentUsername && x.SenderUsername == receiverUsername)
         // .OrderByDescending(x => x.MessageSent)
+        .ProjectTo<MessageDTO>(mapper.ConfigurationProvider)
         .ToListAsync();
 
         var unreadMessages = query.Where(x =>
@@ -64,8 +90,13 @@ IMapper mapper) : IMessagesRepository
             await context.SaveChangesAsync();
         }
 
-        return mapper.Map<IEnumerable<MessageDTO>>(query);
+        return unreadMessages;
 
+    }
+
+    public void RemoveConnection(Connection connection)
+    {
+        context.Connections.Remove(connection);
     }
 
     public async Task<bool> SaveAllAsync()

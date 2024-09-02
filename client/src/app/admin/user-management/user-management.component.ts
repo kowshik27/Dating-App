@@ -30,6 +30,7 @@ export class UserManagementComponent implements OnInit {
         title: 'User Roles',
         username: user.username,
         availableRoles: ['Admin', 'Moderator', 'Member'],
+        roles: [user.roles],
         users: this.users,
         rolesUpdated: false,
       },
@@ -39,13 +40,15 @@ export class UserManagementComponent implements OnInit {
       next: () => {
         if (this.bsModalRef.content && this.bsModalRef.content.rolesUpdated) {
           const selectedRoles = this.bsModalRef.content.selectedRoles;
-          this.adminService
-            .updateUserRoles(user.username, selectedRoles)
-            .subscribe({
-              next: (roles) => {
-                user.roles = roles;
-              },
-            });
+          if (this.bsModalRef.content.roles !== selectedRoles) {
+            this.adminService
+              .updateUserRoles(user.username, selectedRoles)
+              .subscribe({
+                next: (roles) => {
+                  user.roles = roles;
+                },
+              });
+          }
         }
       },
     });

@@ -3,6 +3,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../_models/user';
 import { map } from 'rxjs';
 import { LikesService } from './likes.service';
+import { PresenceService } from './presence.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,8 @@ import { LikesService } from './likes.service';
 export class AccountService {
   private http = inject(HttpClient);
   private likesService = inject(LikesService);
+  private presenceService = inject(PresenceService);
+
   baseUrl = 'https://localhost:5001/api/';
   currentUser = signal<User | null>(null);
   roles = computed(() => {
@@ -36,6 +39,7 @@ export class AccountService {
   logoutSvc() {
     localStorage.removeItem('user');
     this.currentUser.set(null);
+    this.presenceService.stopHubConnection();
   }
 
   registerSvc(registerModel: any) {
@@ -55,5 +59,6 @@ export class AccountService {
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUser.set(user);
     this.likesService.getLikedUsersId();
+    this.presenceService.createHubConnection(user);
   }
 }

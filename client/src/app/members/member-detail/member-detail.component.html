@@ -7,6 +7,12 @@
         class="card-img img-thumbnail"
       />
       <div class="card-body">
+        @if(presenceService.onlineUsers().includes(member.username)){
+        <div class="mb-2" style="font-size: 18px; font-weight: 900">
+          <i class="fa fa-user-circle text-success"></i>
+          <span class="ms-2">Online Now</span>
+        </div>
+        }
         <div>
           <strong class="text-info">Name: </strong>
           <p class="text-primary-emphasis">{{ member.nickName }}</p>
@@ -75,8 +81,6 @@
       <tab heading="Messages" (selectTab)="onTabActivated($event)">
         <app-member-messages
           [receiverUsername]="member.username"
-          [messages]="this.messages"
-          (newMessage)="addNewMessage($event)"
         ></app-member-messages>
       </tab>
     </tabset>

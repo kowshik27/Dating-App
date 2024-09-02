@@ -3,9 +3,10 @@
     <div class="row">
       <div class="col-md-12 col-lg-12 col-xl-12">
         <ul class="list-unstyled text-white">
-          @if(messages().length === 0) {
+          @if(this.messageService.messageThread().length === 0) {
           <h4 class="text-light text-center mb-4">No Messages yet</h4>
-          } @else { @for(message of messages(); track message.id) {
+          } @else { @for(message of this.messageService.messageThread(); track
+          message.id) {
 
           <!---RECIEVER SECTION-->
 

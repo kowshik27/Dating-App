@@ -12,8 +12,7 @@ namespace API.Controllers;
 
 [Authorize]
 public class MessagesController(IMessagesRepository messagesRepository,
- IUserRepository userRepository,
- IMapper mapper) : MyBaseController
+ IUserRepository userRepository, IMapper mapper) : MyBaseController
 {
     [HttpPost]
     public async Task<ActionResult<MessageDTO>> CreateNewMessage([FromBody] CreateMessageDTO createMessageDTO)
