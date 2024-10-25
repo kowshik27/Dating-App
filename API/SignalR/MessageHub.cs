@@ -31,7 +31,8 @@ public class MessageHub(IMessagesRepository messagesRepository,
 
         await Clients.Group(groupName).SendAsync("UpdatedGroup", group);
 
-        var messages = messagesRepository.GetMessageThread(Context.User.GetUserName(), otherUser!);
+        var messages = messagesRepository.GetMessageThread(Context.User.GetUserName(),
+         otherUser!);
 
 
         await Clients.Caller.SendAsync("ReceiveMessageThread", messages);

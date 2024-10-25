@@ -27,9 +27,13 @@ app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowCredential
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.MapControllers();
 app.MapHub<PresenceHub>("hubs/presence");  /*CHeck HERE */
 app.MapHub<MessageHub>("hubs/message");  /*CHeck HERE */
+app.MapFallbackToController("Index", "Fallback");
 
 // Custom Migrations
 

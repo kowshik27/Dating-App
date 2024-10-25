@@ -74,14 +74,14 @@ IMapper mapper) : IMessagesRepository
 
     public async Task<IEnumerable<MessageDTO>> GetMessageThread(string currentUsername, string receiverUsername)
     {
-        var query = await context.Messages
+        var messages = await context.Messages
         .Where(x => x.SenderUsername == currentUsername && x.ReceiverUsername == receiverUsername
         || x.ReceiverUsername == currentUsername && x.SenderUsername == receiverUsername)
         // .OrderByDescending(x => x.MessageSent)
         .ProjectTo<MessageDTO>(mapper.ConfigurationProvider)
         .ToListAsync();
 
-        var unreadMessages = query.Where(x =>
+        var unreadMessages = messages.Where(x =>
         x.ReceiverUsername == currentUsername && x.MessageReadAt == null).ToList();
 
         if (unreadMessages.Count() > 0)
@@ -90,7 +90,7 @@ IMapper mapper) : IMessagesRepository
             await context.SaveChangesAsync();
         }
 
-        return unreadMessages;
+        return messages;
 
     }
 

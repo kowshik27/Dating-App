@@ -4,6 +4,7 @@ import { User } from '../_models/user';
 import { map } from 'rxjs';
 import { LikesService } from './likes.service';
 import { PresenceService } from './presence.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class AccountService {
   private likesService = inject(LikesService);
   private presenceService = inject(PresenceService);
 
-  baseUrl = 'https://localhost:5001/api/';
+  baseUrl = environment.apiUrl;
   currentUser = signal<User | null>(null);
   roles = computed(() => {
     const user = this.currentUser();

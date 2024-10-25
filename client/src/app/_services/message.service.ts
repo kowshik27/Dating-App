@@ -42,6 +42,7 @@ export class MessageService {
       .catch((e) => console.log(`Error Occured in Presence SiganlR - ${e}`));
 
     this.hubConnection.on('ReceiveMessageThread', (messagesRes) => {
+      console.log('Response\t\t--', messagesRes.result?.content);
       this.messageThread.set(messagesRes.result);
     });
 
@@ -53,11 +54,13 @@ export class MessageService {
     this.hubConnection.on('UpdatedGroup', (group: Group) => {
       if (group.connections.some((x) => x.username === otherUsername)) {
         this.messageThread.update((messages) => {
+          console.log('Messages Before: --------\n', messages);
           messages.forEach((message) => {
             if (!message.messageReadAt) {
               message.messageReadAt = new Date(Date.now());
             }
           });
+          console.log('\nMessages After: --------\n', messages);
           return messages;
         });
       }
